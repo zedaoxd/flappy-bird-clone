@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: MovementParams_GameRunning
   m_EditorClassIdentifier: 
   <ForwardSpeed>k__BackingField: 2.5
-  <FlapVelocity>k__BackingField: 9.5
-  <Gravity>k__BackingField: 40
+  <FlapVelocity>k__BackingField: 0
+  <Gravity>k__BackingField: 0
+  FlapAngleDegress: 30
+  RotateDownSpeed: 0

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PipeCoupleSpawner : MonoBehaviour
@@ -12,20 +13,28 @@ public class PipeCoupleSpawner : MonoBehaviour
 
     private Pipe bottomPipe;
     private Pipe topPipe;
-
     public float Width => bottomPipe.Width;
+    int control = 1;
 
     public void SpawnPipes()
     {
         float gapPosY = transform.position.y + Random.Range(-minGapCenter, maxGapCenter);
         float gapSize = Random.Range(minGapSize, maxGapSize);
-
-        bottomPipe = Instantiate(bottomPipePrefab, transform.position, Quaternion.identity, transform);
+        if (control == 1)
+        {
+            bottomPipe = Instantiate(bottomPipePrefab, transform.position, Quaternion.identity, transform);
+        }
+        
         Vector3 bottomPipePos = bottomPipe.transform.position;
         bottomPipePos.y = (gapPosY - gapSize * 0.5f) - (bottomPipe.Head.y - bottomPipe.transform.position.y);
         bottomPipe.transform.position = bottomPipePos;
 
-        topPipe = Instantiate(topPipePrefab, transform.position, Quaternion.identity, transform);
+        if (control == 1)
+        {
+            topPipe = Instantiate(topPipePrefab, transform.position, Quaternion.identity, transform);
+            control = 0;
+        }
+        
         Vector3 topPipePos = topPipe.transform.position;
         topPipePos.y = (gapPosY + gapSize * 0.5f) - (topPipe.Head.y - topPipe.transform.position.y);
         topPipe.transform.position = topPipePos;

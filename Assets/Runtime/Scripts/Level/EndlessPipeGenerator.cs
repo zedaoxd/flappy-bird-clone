@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EndlessPipeGenerator : MonoBehaviour
 {
+    [SerializeField] private int numberOfPipesInstantietesStart = 5;
     [SerializeField] private PlayerController player;
 
     [SerializeField] private Camera mainCamera;
@@ -24,6 +25,12 @@ public class EndlessPipeGenerator : MonoBehaviour
     [SerializeField] private float maxDistanceBetweenPipes;
 
     private List<PipeCoupleSpawner> pipes = new List<PipeCoupleSpawner>();
+    private ObjectPool<PipeCoupleSpawner> pipePool;
+
+    private void Start() 
+    {
+        pipePool = new ObjectPool<PipeCoupleSpawner>(pipeSpawnerPrefab, numberOfPipesInstantietesStart, Vector3.zero, Quaternion.identity, transform);
+    }
 
     public void StartPipeSpawn()
     {
@@ -69,8 +76,8 @@ public class EndlessPipeGenerator : MonoBehaviour
             {
                 for (int i = 0; i <= lastIndexToRemove; i++)
                 {
-                    Destroy(pipes[i].gameObject);
-                }
+                    pipePool.ReturnToPool(pipes[i]);
+                } 
                 pipes.RemoveRange(0, lastIndexToRemove + 1);
             }
         }
@@ -93,8 +100,7 @@ public class EndlessPipeGenerator : MonoBehaviour
 
     private PipeCoupleSpawner SpawnPipe(Vector2 position)
     {
-        PipeCoupleSpawner pipe = Instantiate(pipeSpawnerPrefab, position, Quaternion.identity, transform);
-        pipe.name = $"PipeSpawner {pipes.Count}";
+        PipeCoupleSpawner pipe = pipePool.GetFromPool(position, Quaternion.identity, transform);
         pipes.Add(pipe);
         pipe.SpawnPipes();
         return pipe;
